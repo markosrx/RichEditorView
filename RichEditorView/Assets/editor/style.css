@@ -63,3 +63,8 @@ body {
 h1, p, ul, ol {
     margin: 0;
 }
+
+a {
+    word-break: break-all;
+    color: -apple-system-blue;
+}

@@ -21,7 +21,7 @@ public protocol RichEditorOption {
     /// The action to be evoked when the action is tapped
     /// - parameter editor: The RichEditorToolbar that the RichEditorOption was being displayed in when tapped.
     ///                     Contains a reference to the `editor` RichEditorView to perform actions on.
-    /// - parameter sender: The object that sent the action. Usually a `UIView`.
+    /// - parameter sender: The object that sent the action. Usually a `UIView` from the toolbar item that represents the option.
     func action(_ editor: RichEditorToolbar, sender: AnyObject)
 }
 
@@ -47,8 +47,6 @@ public struct RichEditorOptionItem: RichEditorOption {
     public init(title: String, action: @escaping ((RichEditorToolbar, AnyObject) -> Void)) {
         self.init(image: nil, title: title, action: action)
     }
-    
-    // MARK: RichEditorOption
     
     public func action(_ toolbar: RichEditorToolbar, sender: AnyObject) {
         handler(toolbar, sender)

@@ -27,7 +27,7 @@ document.addEventListener("selectionchange", function() {
 //looks specifically for a Range selection and not a Caret selection
 RE.rangeSelectionExists = function() {
     //!! coerces a null to bool
-    var sel = document.getSelection();
+    const sel = document.getSelection();
     if (sel && sel.type == "Range") {
         return true;
     }
@@ -36,7 +36,7 @@ RE.rangeSelectionExists = function() {
 
 RE.rangeOrCaretSelectionExists = function() {
     //!! coerces a null to bool
-    var sel = document.getSelection();
+    const sel = document.getSelection();
     if (sel && (sel.type == "Range" || sel.type == "Caret")) {
         return true;
     }
@@ -175,6 +175,14 @@ RE.setUnderline = function() {
 };
 
 RE.setTextColor = function(color) {
+    if (!color) {
+        const node = RE.currentSelection.node;
+        if (node) {
+            node.style.color = null;
+        }
+        return;
+    }
+    
     RE.restorerange();
     document.execCommand("styleWithCSS", null, true);
     document.execCommand('foreColor', false, color);
@@ -182,6 +190,14 @@ RE.setTextColor = function(color) {
 };
 
 RE.setTextBackgroundColor = function(color) {
+    if (!color) {
+        const node = RE.currentSelection.node;
+        if (node) {
+            node.style.backgroundColor = null;
+        }
+        return;
+    }
+    
     RE.restorerange();
     document.execCommand("styleWithCSS", null, true);
     document.execCommand('hiliteColor', false, color);
@@ -249,10 +265,9 @@ RE.insertHTML = function(html) {
 
 RE.insertLink = function(url, title) {
     RE.restorerange();
-    var sel = document.getSelection();
+    const sel = document.getSelection();
     if (sel.toString().length !== 0) {
         if (sel.rangeCount) {
-
             var el = document.createElement("a");
             el.setAttribute("href", url);
             el.setAttribute("title", title);
@@ -271,16 +286,25 @@ RE.prepareInsert = function() {
 };
 
 RE.backuprange = function() {
-    var selection = window.getSelection();
-    if (selection.rangeCount > 0) {
-        var range = selection.getRangeAt(0);
-        RE.currentSelection = {
-            "startContainer": range.startContainer,
-            "startOffset": range.startOffset,
-            "endContainer": range.endContainer,
-            "endOffset": range.endOffset
-        };
+    const selection = window.getSelection();
+    if (selection.rangeCount === 0) {
+        return;
     }
+    
+    let node = selection.anchorNode;
+    if (node.nodeType === 3) {
+        // use the parent, if text node
+        node = node.parentNode;
+    }
+    
+    const range = selection.getRangeAt(0);
+    RE.currentSelection = {
+        startContainer: range.startContainer,
+        startOffset: range.startOffset,
+        endContainer: range.endContainer,
+        endOffset: range.endOffset,
+        node,
+    };
 };
 
 RE.addRangeToSelection = function(selection, range) {
@@ -333,7 +357,7 @@ RE.blurFocus = function() {
 /**
 Recursively search element ancestors to find a element nodeName e.g. A
 **/
-var _findNodeByNameInContainer = function(element, nodeName, rootElementId) {
+const _findNodeByNameInContainer = function(element, nodeName, rootElementId) {
     if (element.nodeName == nodeName) {
         return element;
     } else {
@@ -344,7 +368,7 @@ var _findNodeByNameInContainer = function(element, nodeName, rootElementId) {
     }
 };
 
-var isAnchorNode = function(node) {
+const isAnchorNode = function(node) {
     return ("A" == node.nodeName);
 };
 

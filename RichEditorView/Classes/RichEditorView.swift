@@ -288,14 +288,14 @@ private let DefaultInnerLineHeight: Int = 21
         runJS("RE.setUnderline()")
     }
     
-    private func getColorHex(with color: UIColor?, `default` clr: String) -> String {
+    private func getColorHex(with color: UIColor?) -> String {
         // if no color, then clear the color style css
-        return color?.hex == nil ? "'\(clr)'" : "'\(color!.hex)'"
+        return color?.hex == nil ? "null" : "'\(color!.hex)'"
     }
     
     public func setTextColor(_ color: UIColor?) {
         runJS("RE.prepareInsert()")
-        let color = getColorHex(with: color, default: "black")
+        let color = getColorHex(with: color)
         runJS("RE.setTextColor(\(color))")
     }
     
@@ -305,7 +305,7 @@ private let DefaultInnerLineHeight: Int = 21
     
     public func setTextBackgroundColor(_ color: UIColor?) {
         runJS("RE.prepareInsert()")
-        let color = getColorHex(with: color, default: "transparent")
+        let color = getColorHex(with: color)
         runJS("RE.setTextBackgroundColor(\(color))")
     }
     
