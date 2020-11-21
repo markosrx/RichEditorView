@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- "use strict";
+'use strict';
 
 const RE = {};
 
 RE.editor = document.getElementById('editor');
 
 // Not universally supported, but seems to work in iOS 7 and 8
-document.addEventListener("selectionchange", function() {
+document.addEventListener('selectionchange', function() {
     RE.backuprange();
 });
 
@@ -28,7 +28,7 @@ document.addEventListener("selectionchange", function() {
 RE.rangeSelectionExists = function() {
     //!! coerces a null to bool
     const sel = document.getSelection();
-    if (sel && sel.type == "Range") {
+    if (sel && sel.type == 'Range') {
         return true;
     }
     return false;
@@ -37,33 +37,33 @@ RE.rangeSelectionExists = function() {
 RE.rangeOrCaretSelectionExists = function() {
     //!! coerces a null to bool
     const sel = document.getSelection();
-    if (sel && (sel.type == "Range" || sel.type == "Caret")) {
+    if (sel && (sel.type == 'Range' || sel.type == 'Caret')) {
         return true;
     }
     return false;
 };
 
-RE.editor.addEventListener("input", function() {
+RE.editor.addEventListener('input', function() {
     RE.updatePlaceholder();
     RE.backuprange();
-    RE.callback("input");
+    RE.sendInputCallback();
 });
 
-RE.editor.addEventListener("focus", function() {
+RE.editor.addEventListener('focus', function() {
     RE.backuprange();
-    RE.callback("focus");
+    RE.callback('focus');
 });
 
-RE.editor.addEventListener("blur", function() {
-    RE.callback("blur");
+RE.editor.addEventListener('blur', function() {
+    RE.callback('blur');
 });
 
 RE.customAction = function(action) {
-    RE.callback("action/" + action);
+    RE.callback('action/' + action);
 };
 
 RE.updateHeight = function() {
-    RE.callback("updateHeight");
+    RE.callback('updateHeight');
 }
 
 RE.callbackQueue = [];
@@ -73,8 +73,8 @@ RE.runCallbackQueue = function() {
     }
 
     setTimeout(function() {
-        window.location.href = "re-callback://";
-        //window.webkit.messageHandlers.iOS_Native_FlushMessageQueue.postMessage("re-callback://")
+        window.location.href = 're-callback://';
+        //window.webkit.messageHandlers.iOS_Native_FlushMessageQueue.postMessage('re-callback://')
     }, 0);
 };
 
@@ -82,6 +82,11 @@ RE.getCommandQueue = function() {
     var commands = JSON.stringify(RE.callbackQueue);
     RE.callbackQueue = [];
     return commands;
+};
+
+// Tells the editor that the contents have changed, user input action
+RE.sendInputCallback = function() {
+    RE.callback('input');
 };
 
 RE.callback = function(method) {
@@ -92,7 +97,7 @@ RE.callback = function(method) {
 RE.setHtml = function(contents) {
     var tempWrapper = document.createElement('div');
     tempWrapper.innerHTML = contents;
-    var images = tempWrapper.querySelectorAll("img");
+    var images = tempWrapper.querySelectorAll('img');
 
     for (var i = 0; i < images.length; i++) {
         images[i].onload = RE.updateHeight;
@@ -115,14 +120,14 @@ RE.setBaseTextColor = function(color) {
 };
 
 RE.setPlaceholderText = function(text) {
-    RE.editor.setAttribute("placeholder", text);
+    RE.editor.setAttribute('placeholder', text);
 };
 
 RE.updatePlaceholder = function() {
     if (RE.editor.innerHTML.indexOf('img') !== -1 || RE.editor.innerHTML.length > 0) {
-        RE.editor.classList.remove("placeholder");
+        RE.editor.classList.remove('placeholder');
     } else {
-        RE.editor.classList.add("placeholder");
+        RE.editor.classList.add('placeholder');
     }
 };
 
@@ -179,14 +184,15 @@ RE.setTextColor = function(color) {
         const node = RE.currentSelection.node;
         if (node) {
             node.style.color = null;
+            RE.sendInputCallback();
         }
         return;
     }
     
     RE.restorerange();
-    document.execCommand("styleWithCSS", null, true);
+    document.execCommand('styleWithCSS', null, true);
     document.execCommand('foreColor', false, color);
-    document.execCommand("styleWithCSS", null, false);
+    document.execCommand('styleWithCSS', null, false);
 };
 
 RE.setTextBackgroundColor = function(color) {
@@ -194,14 +200,15 @@ RE.setTextBackgroundColor = function(color) {
         const node = RE.currentSelection.node;
         if (node) {
             node.style.backgroundColor = null;
+            RE.sendInputCallback();
         }
         return;
     }
     
     RE.restorerange();
-    document.execCommand("styleWithCSS", null, true);
+    document.execCommand('styleWithCSS', null, true);
     document.execCommand('hiliteColor', false, color);
-    document.execCommand("styleWithCSS", null, false);
+    document.execCommand('styleWithCSS', null, false);
 };
 
 RE.setHeading = function(heading) {
@@ -246,12 +253,12 @@ RE.setLineHeight = function(height) {
 
 RE.insertImage = function(url, alt) {
     var img = document.createElement('img');
-    img.setAttribute("src", url);
-    img.setAttribute("alt", alt);
+    img.setAttribute('src', url);
+    img.setAttribute('alt', alt);
     img.onload = RE.updateHeight;
 
     RE.insertHTML(img.outerHTML);
-    RE.callback("input");
+    RE.sendInputCallback();
 };
 
 RE.setBlockquote = function() {
@@ -268,9 +275,9 @@ RE.insertLink = function(url, title) {
     const sel = document.getSelection();
     if (sel.toString().length !== 0) {
         if (sel.rangeCount) {
-            var el = document.createElement("a");
-            el.setAttribute("href", url);
-            el.setAttribute("title", title);
+            var el = document.createElement('a');
+            el.setAttribute('href', url);
+            el.setAttribute('title', title);
 
             var range = sel.getRangeAt(0).cloneRange();
             range.surroundContents(el);
@@ -278,7 +285,8 @@ RE.insertLink = function(url, title) {
             sel.addRange(range);
         }
     }
-    RE.callback("input");
+    
+    RE.sendInputCallback();
 };
 
 RE.prepareInsert = function() {
@@ -369,7 +377,7 @@ const _findNodeByNameInContainer = function(element, nodeName, rootElementId) {
 };
 
 const isAnchorNode = function(node) {
-    return ("A" == node.nodeName);
+    return ('A' == node.nodeName);
 };
 
 RE.getAnchorTagsInNode = function(node) {
@@ -393,14 +401,13 @@ RE.countAnchorTagsInNode = function(node) {
  * @returns {string}
  */
 RE.getSelectedHref = function() {
-    var href, sel;
-    href = '';
-    sel = window.getSelection();
+    let href = '';
+    let sel = window.getSelection();
     if (!RE.rangeOrCaretSelectionExists()) {
         return null;
     }
 
-    var tags = RE.getAnchorTagsInNode(sel.anchorNode);
+    let tags = RE.getAnchorTagsInNode(sel.anchorNode);
     //if more than one link is there, return null
     if (tags.length > 1) {
         return null;
@@ -411,7 +418,7 @@ RE.getSelectedHref = function() {
         href = node.href;
     }
 
-    return href ? href : null;
+    return (href ? href : null);
 };
 
 // Returns the cursor position relative to its current position onscreen.
@@ -440,5 +447,5 @@ RE.getRelativeCaretYPosition = function() {
 };
 
 window.onload = function() {
-    RE.callback("ready");
+    RE.callback('ready');
 };
