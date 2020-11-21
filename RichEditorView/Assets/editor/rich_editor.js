@@ -74,12 +74,11 @@ RE.runCallbackQueue = function() {
 
     setTimeout(function() {
         window.location.href = 're-callback://';
-        //window.webkit.messageHandlers.iOS_Native_FlushMessageQueue.postMessage('re-callback://')
     }, 0);
 };
 
 RE.getCommandQueue = function() {
-    var commands = JSON.stringify(RE.callbackQueue);
+    let commands = JSON.stringify(RE.callbackQueue);
     RE.callbackQueue = [];
     return commands;
 };
@@ -95,11 +94,11 @@ RE.callback = function(method) {
 };
 
 RE.setHtml = function(contents) {
-    var tempWrapper = document.createElement('div');
+    let tempWrapper = document.createElement('div');
     tempWrapper.innerHTML = contents;
-    var images = tempWrapper.querySelectorAll('img');
+    let images = tempWrapper.querySelectorAll('img');
 
-    for (var i = 0; i < images.length; i++) {
+    for (let i = 0; i < images.length; i++) {
         images[i].onload = RE.updateHeight;
     }
 
@@ -252,7 +251,7 @@ RE.setLineHeight = function(height) {
 };
 
 RE.insertImage = function(url, alt) {
-    var img = document.createElement('img');
+    const img = document.createElement('img');
     img.setAttribute('src', url);
     img.setAttribute('alt', alt);
     img.onload = RE.updateHeight;
@@ -275,11 +274,11 @@ RE.insertLink = function(url, title) {
     const sel = document.getSelection();
     if (sel.toString().length !== 0) {
         if (sel.rangeCount) {
-            var el = document.createElement('a');
+            let el = document.createElement('a');
             el.setAttribute('href', url);
             el.setAttribute('title', title);
 
-            var range = sel.getRangeAt(0).cloneRange();
+            let range = sel.getRangeAt(0).cloneRange();
             range.surroundContents(el);
             sel.removeAllRanges();
             sel.addRange(range);
@@ -324,35 +323,35 @@ RE.addRangeToSelection = function(selection, range) {
 
 // Programatically select a DOM element
 RE.selectElementContents = function(el) {
-    var range = document.createRange();
+    let range = document.createRange();
     range.selectNodeContents(el);
-    var sel = window.getSelection();
+    let sel = window.getSelection();
     // this.createSelectionFromRange sel, range
     RE.addRangeToSelection(sel, range);
 };
 
 RE.restorerange = function() {
-    var selection = window.getSelection();
+    let selection = window.getSelection();
     selection.removeAllRanges();
-    var range = document.createRange();
+    let range = document.createRange();
     range.setStart(RE.currentSelection.startContainer, RE.currentSelection.startOffset);
     range.setEnd(RE.currentSelection.endContainer, RE.currentSelection.endOffset);
     selection.addRange(range);
 };
 
 RE.focus = function() {
-    var range = document.createRange();
+    let range = document.createRange();
     range.selectNodeContents(RE.editor);
     range.collapse(false);
-    var selection = window.getSelection();
+    let selection = window.getSelection();
     selection.removeAllRanges();
     selection.addRange(range);
     RE.editor.focus();
 };
 
 RE.focusAtPoint = function(x, y) {
-    var range = document.caretRangeFromPoint(x, y) || document.createRange();
-    var selection = window.getSelection();
+    const range = document.caretRangeFromPoint(x, y) || document.createRange();
+    const selection = window.getSelection();
     selection.removeAllRanges();
     selection.addRange(range);
     RE.editor.focus();
@@ -381,7 +380,7 @@ const isAnchorNode = function(node) {
 };
 
 RE.getAnchorTagsInNode = function(node) {
-    var links = [];
+    let links = [];
 
     while (node.nextSibling !== null && node.nextSibling !== undefined) {
         node = node.nextSibling;
@@ -414,7 +413,7 @@ RE.getSelectedHref = function() {
     } else if (tags.length == 1) {
         href = tags[0];
     } else {
-        var node = _findNodeByNameInContainer(sel.anchorNode.parentElement, 'A', 'editor');
+        let node = _findNodeByNameInContainer(sel.anchorNode.parentElement, 'A', 'editor');
         href = node.href;
     }
 
@@ -424,18 +423,18 @@ RE.getSelectedHref = function() {
 // Returns the cursor position relative to its current position onscreen.
 // Can be negative if it is above what is visible
 RE.getRelativeCaretYPosition = function() {
-    var y = 0;
-    var sel = window.getSelection();
+    let y = 0;
+    let sel = window.getSelection();
     if (sel.rangeCount) {
-        var range = sel.getRangeAt(0);
-        var needsWorkAround = (range.startOffset == 0)
+        const range = sel.getRangeAt(0);
+        const needsWorkAround = (range.startOffset == 0);
         /* Removing fixes bug when node name other than 'div' */
         // && range.startContainer.nodeName.toLowerCase() == 'div');
         if (needsWorkAround) {
             y = range.startContainer.offsetTop - window.pageYOffset;
         } else {
             if (range.getClientRects) {
-                var rects = range.getClientRects();
+                let rects = range.getClientRects();
                 if (rects.length > 0) {
                     y = rects[0].top;
                 }
