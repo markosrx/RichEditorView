@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0CCBA517EA66E1DE61C19F69 /* Pods_RichEditorViewSample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CA6B4DFCB1BCDED9BE91A70 /* Pods_RichEditorViewSample.framework */; };
+		1AFFE8C6256DF17700EF4493 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AFFE8C5256DF17700EF4493 /* WebKit.framework */; };
 		39883B491AD0DC270031FD16 /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39883B481AD0DC270031FD16 /* KeyboardManager.swift */; };
 		39BBCFB01AD0CC7A00A450D2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39BBCFAF1AD0CC7A00A450D2 /* AppDelegate.swift */; };
 		39BBCFB21AD0CC7A00A450D2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39BBCFB11AD0CC7A00A450D2 /* ViewController.swift */; };
@@ -28,6 +29,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1AFFE8C2256DF15400EF4493 /* RichEditorViewSample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RichEditorViewSample.entitlements; sourceTree = "<group>"; };
+		1AFFE8C5256DF17700EF4493 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk/System/iOSSupport/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
 		1CA6B4DFCB1BCDED9BE91A70 /* Pods_RichEditorViewSample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RichEditorViewSample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3912A4531B966C34005E41FA /* RichEditorViewSample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RichEditorViewSample-Bridging-Header.h"; sourceTree = "<group>"; };
 		39883B481AD0DC270031FD16 /* KeyboardManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardManager.swift; sourceTree = "<group>"; };
@@ -53,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1AFFE8C6256DF17700EF4493 /* WebKit.framework in Frameworks */,
 				0CCBA517EA66E1DE61C19F69 /* Pods_RichEditorViewSample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -70,6 +74,7 @@
 		106F1EB9E1302E9C38A73C48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1AFFE8C5256DF17700EF4493 /* WebKit.framework */,
 				996D5C7A9F5BD7BF325118C8 /* Pods.framework */,
 				1CA6B4DFCB1BCDED9BE91A70 /* Pods_RichEditorViewSample.framework */,
 			);
@@ -100,6 +105,7 @@
 		39BBCFAC1AD0CC7A00A450D2 /* RichEditorViewSample */ = {
 			isa = PBXGroup;
 			children = (
+				1AFFE8C2256DF15400EF4493 /* RichEditorViewSample.entitlements */,
 				39BBCFAF1AD0CC7A00A450D2 /* AppDelegate.swift */,
 				39BBCFB11AD0CC7A00A450D2 /* ViewController.swift */,
 				39BBCFB31AD0CC7A00A450D2 /* Main.storyboard */,
@@ -456,11 +462,13 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = RichEditorViewSample/RichEditorViewSample.entitlements;
 				DEVELOPMENT_TEAM = 89MZF7SG7M;
 				INFOPLIST_FILE = RichEditorViewSample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cbess.RichEditorViewSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "RichEditorViewSample/RichEditorViewSample-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -474,11 +482,13 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = RichEditorViewSample/RichEditorViewSample.entitlements;
 				DEVELOPMENT_TEAM = 89MZF7SG7M;
 				INFOPLIST_FILE = RichEditorViewSample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cbess.RichEditorViewSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "RichEditorViewSample/RichEditorViewSample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};

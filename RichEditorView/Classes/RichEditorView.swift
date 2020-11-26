@@ -9,10 +9,7 @@
 
 import UIKit
 import WebKit
-    
-/// The value we hold in order to be able to set the line height before the JS completely loads.
-private let DefaultInnerLineHeight: Int = 21
-    
+        
 /// RichEditorDelegate defines callbacks for the delegate of the RichEditorView
 @objc public protocol RichEditorDelegate: class {
     /// Called when the inner height of the text being displayed changes
@@ -85,14 +82,7 @@ private let DefaultInnerLineHeight: Int = 21
             delegate?.richEditor?(self, heightDidChange: editorHeight)
         }
     }
-    
-    /// The line height of the editor. Defaults to 21.
-    open private(set) var lineHeight: Int = DefaultInnerLineHeight {
-        didSet {
-            runJS("RE.setLineHeight('\(lineHeight)px')")
-        }
-    }
-    
+        
     /// Whether or not the editor DOM element has finished loading or not yet.
     private var isEditorLoaded = false
     
@@ -162,20 +152,6 @@ private let DefaultInnerLineHeight: Int = 21
         isContentEditable(handler: handler)
     }
     
-    private func getLineHeight(handler: @escaping (Int) -> Void) {
-        if isEditorLoaded {
-            runJS("RE.getLineHeight()") { r in
-                if let r = Int(r) {
-                    handler(r)
-                } else {
-                    handler(DefaultInnerLineHeight)
-                }
-            }
-        } else {
-            handler(DefaultInnerLineHeight)
-        }
-    }
-    
     private func setHTML(_ value: String) {
         if isEditorLoaded {
             runJS("RE.setHtml('\(value.escaped)')") { _ in
@@ -187,13 +163,7 @@ private let DefaultInnerLineHeight: Int = 21
     /// The inner height of the editor div.
     /// Fetches it from JS every time, so might be slow!
     private func getClientHeight(handler: @escaping (Int) -> Void) {
-        runJS("document.getElementById('editor').clientHeight") { r in
-            if let r = Int(r) {
-                handler(r)
-            } else {
-                handler(0)
-            }
-        }
+        handler(0)
     }
     
     public func getHtml(handler: @escaping (String) -> Void) {
@@ -495,48 +465,6 @@ private let DefaultInnerLineHeight: Int = 21
     }
     
     private func updateHeight() {
-        runJS("document.getElementById('editor').clientHeight") { heightString in
-            let height = Int(heightString) ?? 0
-            if self.editorHeight != height {
-                self.editorHeight = height
-            }
-        }
-    }
-    
-    /// Scrolls the editor to a position where the caret is visible.
-    /// Called repeatedly to make sure the caret is always visible when inputting text.
-    /// Works only if the `lineHeight` of the editor is available.
-    private func scrollCaretToVisible() {
-        let scrollView = self.webView.scrollView
-        
-        getClientHeight(handler: { clientHeight in
-            let contentHeight = clientHeight > 0 ? CGFloat(clientHeight) : scrollView.frame.height
-            scrollView.contentSize = CGSize(width: scrollView.frame.width, height: contentHeight)
-            
-            // XXX: Maybe find a better way to get the cursor height
-            self.getLineHeight(handler: { lh in
-                let lineHeight = CGFloat(lh)
-                let cursorHeight = lineHeight - 4
-                self.relativeCaretYPosition(handler: { r in
-                    let visiblePosition = CGFloat(r)
-                    var offset: CGPoint?
-                    
-                    if visiblePosition + cursorHeight > scrollView.bounds.size.height {
-                        // Visible caret position goes further than our bounds
-                        offset = CGPoint(x: 0, y: (visiblePosition + lineHeight) - scrollView.bounds.height + scrollView.contentOffset.y)
-                    } else if visiblePosition < 0 {
-                        // Visible caret position is above what is currently visible
-                        var amount = scrollView.contentOffset.y + visiblePosition
-                        amount = amount < 0 ? 0 : amount
-                        offset = CGPoint(x: scrollView.contentOffset.x, y: amount)
-                    }
-                    
-                    if let offset = offset {
-                        scrollView.setContentOffset(offset, animated: true)
-                    }
-                })
-            })
-        })
     }
     
     /// Called when actions are received from JavaScript
@@ -550,7 +478,6 @@ private let DefaultInnerLineHeight: Int = 21
                 contentHTML = html
                 contentEditable = editingEnabledVar
                 placeholder = placeholderText
-                lineHeight = DefaultInnerLineHeight
                 
                 delegate?.richEditorDidLoad?(self)
                 isReady = true
@@ -558,10 +485,8 @@ private let DefaultInnerLineHeight: Int = 21
             updateHeight()
         }
         else if method.hasPrefix("input") {
-            scrollCaretToVisible()
             runJS("RE.getHtml()") { content in
                 self.contentHTML = content
-                self.updateHeight()
             }
         }
         else if method.hasPrefix("updateHeight") {

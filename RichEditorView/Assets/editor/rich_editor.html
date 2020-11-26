@@ -4,15 +4,19 @@
         <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
         <meta name="supported-color-schemes" content="light dark">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" type="text/css" href="normalize.css">
+<!--        <link rel="stylesheet" type="text/css" href="normalize.css">-->
+        <link rel="stylesheet" type="text/css" href="trix.css">
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
     
     <body>
         <div id="container">
-            <div id="editor" contentEditable="true" placeholder="" class="placeholder"></div>
+            <trix-toolbar id="toolbar"></trix-toolbar>
+            <input id="html" type="hidden" name="content" />
+            <trix-editor class="html-editor" input="html" toolbar="toolbar"></trix-editor>
         </div>
         
+        <script type="text/javascript" src="trix-core.js"></script>
         <script type="text/javascript" src="rich_editor.js"></script>
     </body>
 </html>

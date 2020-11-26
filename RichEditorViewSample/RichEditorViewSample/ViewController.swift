@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     var isTextColor = true
 
     lazy var toolbar: RichEditorToolbar = {
-        let toolbar = RichEditorToolbar(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 44))
+        let toolbar = RichEditorToolbar(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 44))
 //        let options: [RichEditorDefaultOption] = [
 //            .bold, .italic, .underline,
 //            .unorderedList, .orderedList,
@@ -31,8 +31,15 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         editorView.delegate = self
+        #if targetEnvironment(macCatalyst)
+        let rect = view.bounds
+        toolbar.frame = CGRect(x: 0, y: rect.height - 44, width: rect.width, height: 44)
+        toolbar.autoresizingMask = [.flexibleWidth]
+        view.addSubview(toolbar)
+        #else
         editorView.inputAccessoryView = toolbar
-        editorView.placeholder = "Edit here"
+        #endif
+        editorView.placeholder = "Type here"
         editorView.html = "<b>Jesus is God.</b> He saves by grace through faith alone. Soli Deo gloria! <a href='https://perfectGod.com'>perfectGod.com</a>"
 
         toolbar.delegate = self

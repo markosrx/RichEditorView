@@ -15,14 +15,20 @@
  */
 'use strict';
 
-const RE = {};
+const editorElement = document.querySelector('trix-editor');
+const editor = editorElement.editor;
+const RE = {
+    editor,
+};
 
-RE.editor = document.getElementById('editor');
+RE.onChange = function() {
+    RE.sendInputCallback();
+};
 
 // Not universally supported, but seems to work in iOS 7 and 8
-document.addEventListener('selectionchange', function() {
-    RE.backuprange();
-});
+// document.addEventListener('selectionchange', function() {
+//     RE.backuprange();
+// });
 
 //looks specifically for a Range selection and not a Caret selection
 RE.rangeSelectionExists = function() {
@@ -43,28 +49,24 @@ RE.rangeOrCaretSelectionExists = function() {
     return false;
 };
 
-RE.editor.addEventListener('input', function() {
-    RE.updatePlaceholder();
-    RE.backuprange();
-    RE.sendInputCallback();
-});
-
-RE.editor.addEventListener('focus', function() {
-    RE.backuprange();
-    RE.callback('focus');
-});
-
-RE.editor.addEventListener('blur', function() {
-    RE.callback('blur');
-});
+//RE.editor.addEventListener('input', function() {
+//    RE.updatePlaceholder();
+//    RE.backuprange();
+//    RE.sendInputCallback();
+//});
+//
+//RE.editor.addEventListener('focus', function() {
+//    RE.backuprange();
+//    RE.callback('focus');
+//});
+//
+//RE.editor.addEventListener('blur', function() {
+//    RE.callback('blur');
+//});
 
 RE.customAction = function(action) {
     RE.callback('action/' + action);
 };
-
-RE.updateHeight = function() {
-    RE.callback('updateHeight');
-}
 
 RE.callbackQueue = [];
 RE.runCallbackQueue = function() {
@@ -93,45 +95,37 @@ RE.callback = function(method) {
     RE.runCallbackQueue();
 };
 
-RE.setHtml = function(contents) {
-    let tempWrapper = document.createElement('div');
-    tempWrapper.innerHTML = contents;
-    let images = tempWrapper.querySelectorAll('img');
+RE.setHtml = function(html) {
+    editor.loadHTML(html);
+};
 
-    for (let i = 0; i < images.length; i++) {
-        images[i].onload = RE.updateHeight;
-    }
-
-    RE.editor.innerHTML = tempWrapper.innerHTML;
-    RE.updatePlaceholder();
+RE.insertHTML = function(html) {
+    editor.insertHTML(html);
 };
 
 RE.getHtml = function() {
-    return RE.editor.innerHTML;
+    return editorElement.value;
 };
 
 RE.getText = function() {
-    return RE.editor.innerText;
+    return editorElement.innerText;
 };
 
 RE.setBaseTextColor = function(color) {
-    RE.editor.style.color  = color;
+    RE.editor.style.color = color;
 };
 
 RE.setPlaceholderText = function(text) {
-    RE.editor.setAttribute('placeholder', text);
+    RE.editor.element.setAttribute('placeholder', text);
 };
 
 RE.updatePlaceholder = function() {
-    if (RE.editor.innerHTML.indexOf('img') !== -1 || RE.editor.innerHTML.length > 0) {
-        RE.editor.classList.remove('placeholder');
-    } else {
-        RE.editor.classList.add('placeholder');
-    }
+    RE.setPlaceholderText(RE.editor.element.getAttribute('placeholder'));
+    RE.editor.e.fire('change.placeholder');
 };
 
 RE.removeFormat = function() {
-    document.execCommand('removeFormat', false, null);
+    RE.command('removeFormat');
 };
 
 RE.setFontSize = function(size) {
@@ -147,39 +141,41 @@ RE.setHeight = function(size) {
 };
 
 RE.undo = function() {
-    document.execCommand('undo', false, null);
+    RE.command('undo');
 };
 
 RE.redo = function() {
-    document.execCommand('redo', false, null);
+    RE.command('redo');
 };
 
 RE.setBold = function() {
-    document.execCommand('bold', false, null);
+    RE.command('bold')
 };
 
 RE.setItalic = function() {
-    document.execCommand('italic', false, null);
+    RE.command('italic');
 };
 
 RE.setSubscript = function() {
-    document.execCommand('subscript', false, null);
+    RE.command('subscript');
 };
 
 RE.setSuperscript = function() {
-    document.execCommand('superscript', false, null);
+    RE.command('superscript');
 };
 
 RE.setStrikeThrough = function() {
-    document.execCommand('strikeThrough', false, null);
+    RE.command('strikeThrough');
 };
 
 RE.setUnderline = function() {
-    document.execCommand('underline', false, null);
+    RE.command('underline');
 };
 
 RE.setTextColor = function(color) {
     if (!color) {
+        RE.backuprange();
+        
         const node = RE.currentSelection.node;
         if (node) {
             node.style.color = null;
@@ -189,13 +185,13 @@ RE.setTextColor = function(color) {
     }
     
     RE.restorerange();
-    document.execCommand('styleWithCSS', null, true);
-    document.execCommand('foreColor', false, color);
-    document.execCommand('styleWithCSS', null, false);
+    RE.command('foreColor', color);
 };
 
 RE.setTextBackgroundColor = function(color) {
     if (!color) {
+        RE.backuprange();
+        
         const node = RE.currentSelection.node;
         if (node) {
             node.style.backgroundColor = null;
@@ -204,51 +200,48 @@ RE.setTextBackgroundColor = function(color) {
         return;
     }
     
-    RE.restorerange();
-    document.execCommand('styleWithCSS', null, true);
-    document.execCommand('hiliteColor', false, color);
-    document.execCommand('styleWithCSS', null, false);
+    RE.command('bgColor', color);
 };
 
 RE.setHeading = function(heading) {
-    document.execCommand('formatBlock', false, '<h' + heading + '>');
+    RE.command('heading', parseInt(heading, 10));
 };
 
 RE.setIndent = function() {
-    document.execCommand('indent', false, null);
+    RE.command('indent');
 };
 
 RE.setOutdent = function() {
-    document.execCommand('outdent', false, null);
+    RE.command('outdent');
 };
 
 RE.setOrderedList = function() {
-    document.execCommand('insertOrderedList', false, null);
+    RE.command('insertOrderedList');
 };
 
 RE.setUnorderedList = function() {
-    document.execCommand('insertUnorderedList', false, null);
+    RE.command('insertUnorderedList');
 };
 
 RE.setJustifyLeft = function() {
-    document.execCommand('justifyLeft', false, null);
+    RE.command('justifyLeft');
 };
 
 RE.setJustifyCenter = function() {
-    document.execCommand('justifyCenter', false, null);
+    RE.command('justifyCenter');
 };
 
 RE.setJustifyRight = function() {
-    document.execCommand('justifyRight', false, null);
+    RE.command('justifyRight');
 };
-
-RE.getLineHeight = function() {
-    return RE.editor.style.lineHeight;
-};
-
-RE.setLineHeight = function(height) {
-    RE.editor.style.lineHeight = height;
-};
+//
+//RE.getLineHeight = function() {
+//    return RE.editor.style.lineHeight;
+//};
+//
+//RE.setLineHeight = function(height) {
+//    RE.editor.style.lineHeight = height;
+//};
 
 RE.insertImage = function(url, alt) {
     const img = document.createElement('img');
@@ -261,16 +254,10 @@ RE.insertImage = function(url, alt) {
 };
 
 RE.setBlockquote = function() {
-    document.execCommand('formatBlock', false, '<blockquote>');
-};
-
-RE.insertHTML = function(html) {
-    RE.restorerange();
-    document.execCommand('insertHTML', false, html);
+    RE.command('formatBlock', '<blockquote>');
 };
 
 RE.insertLink = function(url, title) {
-    RE.restorerange();
     const sel = document.getSelection();
     if (sel.toString().length !== 0) {
         if (sel.rangeCount) {
@@ -288,8 +275,53 @@ RE.insertLink = function(url, title) {
     RE.sendInputCallback();
 };
 
-RE.prepareInsert = function() {
-    RE.backuprange();
+RE.command = function (cmd, value) {
+    const e = RE.editor;
+    switch (cmd) {
+        case 'indent':
+            e.increaseNestingLevel();
+            return;
+            
+        case 'outdent':
+            e.decreaseNestingLevel();
+            return;
+            
+        case 'undo':
+            e.undo();
+            return;
+            
+        case 'redo':
+            e.redo();
+            return;
+            
+        case 'strikeThrough':
+            cmd = 'strike';
+            break;
+
+        case 'bgColor':
+            return;
+
+        case 'foreColor':
+            return;
+
+        case 'insertOrderedList':
+            cmd = 'number';
+            break;
+
+        case 'insertUnorderedList':
+            cmd = 'bullet';
+            break;
+
+        case '':
+            return;
+    }
+    
+    // toggle the attribute
+    if (e.attributeIsActive(cmd)) {
+        e.deactivateAttribute(cmd);
+    } else {
+        e.activateAttribute(cmd);
+    }
 };
 
 RE.backuprange = function() {
@@ -417,34 +449,15 @@ RE.getSelectedHref = function() {
         href = node.href;
     }
 
-    return (href ? href : null);
-};
-
-// Returns the cursor position relative to its current position onscreen.
-// Can be negative if it is above what is visible
-RE.getRelativeCaretYPosition = function() {
-    let y = 0;
-    let sel = window.getSelection();
-    if (sel.rangeCount) {
-        const range = sel.getRangeAt(0);
-        const needsWorkAround = (range.startOffset == 0);
-        /* Removing fixes bug when node name other than 'div' */
-        // && range.startContainer.nodeName.toLowerCase() == 'div');
-        if (needsWorkAround) {
-            y = range.startContainer.offsetTop - window.pageYOffset;
-        } else {
-            if (range.getClientRects) {
-                let rects = range.getClientRects();
-                if (rects.length > 0) {
-                    y = rects[0].top;
-                }
-            }
-        }
-    }
-
-    return y;
+    return href || null;
 };
 
 window.onload = function() {
     RE.callback('ready');
+    
+    // register events
+    editorElement.addEventListener('trix-change', function() {
+        RE.onChange();
+    });
 };
+

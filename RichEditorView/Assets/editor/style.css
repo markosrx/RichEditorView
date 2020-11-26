@@ -41,27 +41,17 @@ body {
     height: 100%;
 }
 
-#editor {
-    -webkit-user-select: auto !important;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    overflow: auto;
-    display: table-cell;
-    height: 100%;
-}
-
-#editor:focus {
-    outline: 0px solid transparent;
-}
-
-.placeholder[placeholder]:after {
-    content: attr(placeholder);
-    position: absolute;
-    top: 0px;
-    color: #ccc;
+trix-editor {
+    border: none;
+    padding: 0;
 }
 
 h1, p, ul, ol {
     margin: 0;
+}
+
+ul {
+    padding-inline-start: 1.3em;
 }
 
 a {
