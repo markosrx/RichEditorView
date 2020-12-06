@@ -113,7 +113,7 @@ import WebKit
             }
         }
     }
-    
+        
     // MARK: Initialization
     
     public override init(frame: CGRect) {
@@ -140,10 +140,27 @@ import WebKit
         webView.scrollView.clipsToBounds = false
         addSubview(webView)
         
-        if let filePath = Bundle(for: RichEditorView.self).path(forResource: "rich_editor", ofType: "html") {
-            let url = URL(fileURLWithPath: filePath, isDirectory: false)
-            webView.loadFileURL(url, allowingReadAccessTo: url.deletingLastPathComponent())
+        reloadHTML(with: html)
+    }
+    
+    /// Reloads the HTML for the editor.
+    /// - parameter html: The HTML that will be loaded into the editor view once it finishes initializing.
+    /// - parameter headerHTML: The header HTML that will be inserted after the default styles.
+    /// - parameter footerHTML: The footer HTML that will be inserted after the default JavaScript.
+    public func reloadHTML(with html: String, headerHTML: String = "", footerHTML: String = "") {
+        guard let filePath = Bundle(for: RichEditorView.self).path(forResource: "rich_editor", ofType: "html") else {
+            return
         }
+        
+        let readerHtmlTemplate = try! String(contentsOfFile: filePath)
+        let fullHtml = readerHtmlTemplate
+            .replacingOccurrences(of: "{{header}}", with: headerHTML)
+            .replacingOccurrences(of: "{{footer}}", with: footerHTML)
+        
+        webView.loadHTMLString(fullHtml, baseURL: URL(fileURLWithPath: filePath, isDirectory: false).deletingLastPathComponent())
+        
+        isEditorLoaded = false
+        self.html = html
     }
     
     // MARK: - Rich Text Editing
