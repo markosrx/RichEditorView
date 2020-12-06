@@ -33,8 +33,9 @@ class ViewController: UIViewController {
         editorView.delegate = self
         editorView.inputAccessoryView = toolbar
         editorView.placeholder = "Edit here"
-        editorView.html = "<b>Jesus is God.</b> He saves by grace through faith alone. Soli Deo gloria! <a href='https://perfectGod.com'>perfectGod.com</a>"
-
+        let html = "<b>Jesus is God.</b> He saves by grace through faith alone. Soli Deo gloria! <a href='https://perfectGod.com'>perfectGod.com</a>"
+        editorView.reloadHTML(with: html)
+        
         toolbar.delegate = self
         toolbar.editor = editorView
 
