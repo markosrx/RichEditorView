@@ -35,7 +35,6 @@ fileprivate func pinViewEdges(of childView: UIView, to parentView: UIView) {
     ])
 }
 
-private let ItemMargin: CGFloat = 12
 private let DefaultFont = UIFont.preferredFont(forTextStyle: .body)
 
 /// RichEditorToolbar is UIView that contains the toolbar for actions that can be performed on a RichEditorView
@@ -58,6 +57,13 @@ private let DefaultFont = UIFont.preferredFont(forTextStyle: .body)
     open var barTintColor: UIColor? {
         get { return backgroundColor }
         set { backgroundColor = newValue }
+    }
+    
+    /// The spacing between the option items
+    open var itemMargin: CGFloat = 12 {
+        didSet {
+            collectionView.collectionViewLayout.invalidateLayout()
+        }
     }
 
     private var collectionView: UICollectionView!
@@ -132,7 +138,7 @@ private let DefaultFont = UIFont.preferredFont(forTextStyle: .body)
     }
 
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return ItemMargin
+        return itemMargin
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -147,11 +153,11 @@ private let DefaultFont = UIFont.preferredFont(forTextStyle: .body)
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: ItemMargin, height: 1)
+        return CGSize(width: itemMargin, height: 1)
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        return CGSize(width: ItemMargin, height: 1)
+        return CGSize(width: itemMargin, height: 1)
     }
 }
 
