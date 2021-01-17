@@ -20,7 +20,7 @@ const RE = {};
 RE.editor = document.getElementById('editor');
 
 // Not universally supported, but seems to work in iOS 7 and 8
-document.addEventListener('selectionchange', function() {
+document.addEventListener('selectionchange', function(e) {
     RE.backuprange();
     RE.enabledEditingItems(e);
 });
