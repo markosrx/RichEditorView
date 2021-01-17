@@ -100,7 +100,7 @@ private let DefaultFont = UIFont.preferredFont(forTextStyle: .body)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.register(ToolbarCell.self, forCellWithReuseIdentifier: "cell")
         
-        let visualView = UIVisualEffectView(frame: bounds)
+        let visualView = UIVisualEffectView(frame: CGRect(x: 0, y: 0, width: self.bounds.width - 50 , height: 44))
         visualView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         visualView.effect = UIBlurEffect(style: .regular)
         visualView.contentView.addSubview(collectionView)
