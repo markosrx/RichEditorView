@@ -384,6 +384,10 @@ private let DefaultInnerLineHeight: Int = 21
         runJS("RE.blurFocus()")
     }
     
+    public func keyboard() {
+        self.endEditing(true)
+    }
+    
     /// Runs some JavaScript on the WKWebView and returns the result
     /// If there is no result, returns an empty string
     /// - parameter js: The JavaScript string to be run

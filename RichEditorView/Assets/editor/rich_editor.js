@@ -22,6 +22,7 @@ RE.editor = document.getElementById('editor');
 // Not universally supported, but seems to work in iOS 7 and 8
 document.addEventListener('selectionchange', function() {
     RE.backuprange();
+    RE.enabledEditingItems(e);
 });
 
 //looks specifically for a Range selection and not a Caret selection
@@ -156,26 +157,32 @@ RE.redo = function() {
 
 RE.setBold = function() {
     document.execCommand('bold', false, null);
+    RE.enabledEditingItems();
 };
 
 RE.setItalic = function() {
     document.execCommand('italic', false, null);
+    RE.enabledEditingItems();
 };
 
 RE.setSubscript = function() {
     document.execCommand('subscript', false, null);
+    RE.enabledEditingItems();
 };
 
 RE.setSuperscript = function() {
     document.execCommand('superscript', false, null);
+    RE.enabledEditingItems();
 };
 
 RE.setStrikeThrough = function() {
     document.execCommand('strikeThrough', false, null);
+    RE.enabledEditingItems();
 };
 
 RE.setUnderline = function() {
     document.execCommand('underline', false, null);
+    RE.enabledEditingItems();
 };
 
 RE.setTextColor = function(color) {
@@ -224,22 +231,27 @@ RE.setOutdent = function() {
 
 RE.setOrderedList = function() {
     document.execCommand('insertOrderedList', false, null);
+    RE.enabledEditingItems();
 };
 
 RE.setUnorderedList = function() {
     document.execCommand('insertUnorderedList', false, null);
+    RE.enabledEditingItems();
 };
 
 RE.setJustifyLeft = function() {
     document.execCommand('justifyLeft', false, null);
+    RE.enabledEditingItems();
 };
 
 RE.setJustifyCenter = function() {
     document.execCommand('justifyCenter', false, null);
+    RE.enabledEditingItems();
 };
 
 RE.setJustifyRight = function() {
     document.execCommand('justifyRight', false, null);
+    RE.enabledEditingItems();
 };
 
 RE.getLineHeight = function() {
@@ -447,4 +459,136 @@ RE.getRelativeCaretYPosition = function() {
 
 window.onload = function() {
     RE.callback('ready');
+};
+
+//SRX CODE
+RE.isCommandEnabled = function(commandName) {
+    return document.queryCommandState(commandName);
+};
+
+RE.enabledEditingItems = function(e) {
+    
+//    console.log('enabledEditingItems');
+    var items = [];
+    if (RE.isCommandEnabled('bold')) {
+        items.push('Bold');
+    }
+    if (RE.isCommandEnabled('italic')) {
+        items.push('Italic');
+    }
+    if (RE.isCommandEnabled('subscript')) {
+        items.push('Sub');
+    }
+    if (RE.isCommandEnabled('superscript')) {
+        items.push('Super');
+    }
+    if (RE.isCommandEnabled('strikeThrough')) {
+        items.push('Strike');
+    }
+    if (RE.isCommandEnabled('underline')) {
+        items.push('Underline');
+    }
+    if (RE.isCommandEnabled('insertOrderedList')) {
+        items.push('Ordered List');
+    }
+    if (RE.isCommandEnabled('insertUnorderedList')) {
+        items.push('Unordered List');
+    }
+    if (RE.isCommandEnabled('justifyCenter')) {
+        items.push('Center');
+    }
+    if (RE.isCommandEnabled('justifyFull')) {
+        items.push('justifyFull');
+    }
+    if (RE.isCommandEnabled('justifyLeft')) {
+        items.push('Left');
+    }
+    if (RE.isCommandEnabled('justifyRight')) {
+        items.push('Right');
+    }
+    if (RE.isCommandEnabled('insertHorizontalRule')) {
+        items.push('horizontalRule');
+    }
+//    console.log(items)
+    RE.customAction(items)
+//    var formatBlock = document.queryCommandValue('formatBlock');
+//    if (formatBlock.length > 0) {
+//        items.push(formatBlock);
+//    }
+    // Images
+//    $('img').bind('touchstart', function(e) {
+//                  $('img').removeClass('zs_active');
+//                  $(this).addClass('zs_active');
+//                  });
+//
+//    // Use jQuery to figure out those that are not supported
+//    if (typeof(e) != "undefined") {
+//
+//        // The target element
+//        var s = zss_editor.getSelectedNode();
+//        var t = $(s);
+//        var nodeName = e.target.nodeName.toLowerCase();
+//
+//        // Background Color
+//        var bgColor = t.css('backgroundColor');
+//        if (bgColor.length != 0 && bgColor != 'rgba(0, 0, 0, 0)' && bgColor != 'rgb(0, 0, 0)' && bgColor != 'transparent') {
+//            items.push('backgroundColor');
+//        }
+//
+//        // Text Color
+//        var textColor = t.css('color');
+//        if (textColor.length != 0 && textColor != 'rgba(0, 0, 0, 0)' && textColor != 'rgb(0, 0, 0)' && textColor != 'transparent') {
+//            items.push('textColor');
+//        }
+//
+//        //Fonts
+//        var font = t.css('font-family');
+//        if (font.length != 0 && font != 'Arial, Helvetica, sans-serif') {
+//            items.push('fonts');
+//        }
+//
+//        // Link
+//        if (nodeName == 'a') {
+//            zss_editor.currentEditingLink = t;
+//            var title = t.attr('title');
+//            items.push('link:'+t.attr('href'));
+//            if (t.attr('title') !== undefined) {
+//                items.push('link-title:'+t.attr('title'));
+//            }
+//
+//        } else {
+//            zss_editor.currentEditingLink = null;
+//        }
+//        // Blockquote
+//        if (nodeName == 'blockquote') {
+//            items.push('indent');
+//        }
+//        // Image
+//        if (nodeName == 'img') {
+//            zss_editor.currentEditingImage = t;
+//            items.push('image:'+t.attr('src'));
+//            if (t.attr('alt') !== undefined) {
+//                items.push('image-alt:'+t.attr('alt'));
+//            }
+//
+//        } else {
+//            zss_editor.currentEditingImage = null;
+//        }
+//
+//    }
+//
+//    if (items.length > 0) {
+//        if (zss_editor.isUsingiOS) {
+//            //window.location = "zss-callback/"+items.join(',');
+//            window.location = "callback://0/"+items.join(',');
+//        } else {
+//            console.log("callback://"+items.join(','));
+//        }
+//    } else {
+//        if (zss_editor.isUsingiOS) {
+//            window.location = "zss-callback/";
+//        } else {
+//            console.log("callback://");
+//        }
+//    }
 };

@@ -65,6 +65,13 @@ private let DefaultFont = UIFont.preferredFont(forTextStyle: .body)
             collectionView.collectionViewLayout.invalidateLayout()
         }
     }
+    
+    /// The list of active options to be highlighted on the toolbar
+    open var activeOptions: [String] = [] {
+        didSet {
+            updateToolbar()
+        }
+    }
 
     private var collectionView: UICollectionView!
     
@@ -98,11 +105,32 @@ private let DefaultFont = UIFont.preferredFont(forTextStyle: .body)
         visualView.effect = UIBlurEffect(style: .regular)
         visualView.contentView.addSubview(collectionView)
         
+        let imageView = UIImageView(frame: .zero)
+        let bundle = Bundle(for: RichEditorToolbar.self)
+        imageView.image = UIImage(named: "keyboard", in: bundle, compatibleWith: nil)?.withRenderingMode(.alwaysTemplate).withAlignmentRectInsets(UIEdgeInsets(top: -5, left: -5, bottom: -5, right: -5))
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = UIColor.init(hexString: "29A19C")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.sizeToFit()
+        
+        let visualViewDismissBtn = UIVisualEffectView(frame: CGRect(x: self.bounds.width - 50, y: 0, width: 50 , height: 44))
+        visualViewDismissBtn.effect = UIBlurEffect(style: .regular)
+        visualViewDismissBtn.isUserInteractionEnabled = true
+        visualViewDismissBtn.contentView.addBorder(toSide: .Left, withColor: UIColor.gray.cgColor, andThickness: 0.6)
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(RichEditorToolbar.dismissKeyboard))
+        visualViewDismissBtn.addGestureRecognizer(tapGestureRecognizer)
+        visualViewDismissBtn.contentView.addSubview(imageView)
+        
         pinViewEdges(of: collectionView, to: visualView)
+        pinViewEdges(of: imageView, to: visualViewDismissBtn)
 
         addSubview(visualView)
+        addSubview(visualViewDismissBtn)
     }
     
+    @objc private func dismissKeyboard(tapGestureRecognizer: UITapGestureRecognizer) {
+        editor?.keyboard()
+    }
     
     private func updateToolbar() {
         collectionView.reloadData()
@@ -125,7 +153,11 @@ private let DefaultFont = UIFont.preferredFont(forTextStyle: .body)
         let option = options[indexPath.item]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! ToolbarCell
         cell.option = option
-        
+        if activeOptions.contains(option.title) {
+            cell.toggleSelected(true)
+        } else {
+            cell.toggleSelected(false)
+        }
         return cell
     }
     
@@ -188,6 +220,14 @@ private class ToolbarCell: UICollectionViewCell {
             subview.sizeToFit()
             contentView.addSubview(subview)
             pinViewEdges(of: subview, to: contentView)
+        }
+    }
+    
+    func toggleSelected(_ select:Bool) {
+        if (select) {
+            tintColor = UIColor.init(hexString: "29A19C")
+        }else {
+            tintColor = .none
         }
     }
 }
