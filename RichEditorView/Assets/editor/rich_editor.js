@@ -199,6 +199,7 @@ RE.setTextColor = function(color) {
     document.execCommand('styleWithCSS', null, true);
     document.execCommand('foreColor', false, color);
     document.execCommand('styleWithCSS', null, false);
+    RE.enabledEditingItems();
 };
 
 RE.setTextBackgroundColor = function(color) {
@@ -215,10 +216,20 @@ RE.setTextBackgroundColor = function(color) {
     document.execCommand('styleWithCSS', null, true);
     document.execCommand('hiliteColor', false, color);
     document.execCommand('styleWithCSS', null, false);
+    RE.enabledEditingItems();
 };
 
 RE.setHeading = function(heading) {
-    document.execCommand('formatBlock', false, '<h' + heading + '>');
+    const node = RE.currentSelection.node;
+    var t = node.tagName.toLowerCase();
+    var isHeading = (t == 'h1' || t == 'h2' || t == 'h3' || t == 'h4' || t == 'h5' || t == 'h6');
+    if (isHeading && 'h'+heading == t) {
+        var c = node.innerHTML;
+        node.replaceWith(c);
+    } else {
+        document.execCommand('formatBlock', false, '<h' + heading + '>');
+    }
+    RE.enabledEditingItems();
 };
 
 RE.setIndent = function() {
@@ -274,6 +285,7 @@ RE.insertImage = function(url, alt) {
 
 RE.setBlockquote = function() {
     document.execCommand('formatBlock', false, '<blockquote>');
+    RE.enabledEditingItems();
 };
 
 RE.insertHTML = function(html) {
@@ -509,12 +521,15 @@ RE.enabledEditingItems = function(e) {
     if (RE.isCommandEnabled('insertHorizontalRule')) {
         items.push('horizontalRule');
     }
+    
+    
+    var formatBlock = document.queryCommandValue('formatBlock');
+    if (formatBlock.length > 0) {
+        items.push(formatBlock.toUpperCase());
+    }
 //    console.log(items)
     RE.customAction(items)
-//    var formatBlock = document.queryCommandValue('formatBlock');
-//    if (formatBlock.length > 0) {
-//        items.push(formatBlock);
-//    }
+    
     // Images
 //    $('img').bind('touchstart', function(e) {
 //                  $('img').removeClass('zs_active');

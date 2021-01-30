@@ -9,21 +9,29 @@
 import Foundation
 
 internal extension UIColor {
-
+    
     /// Hexadecimal representation of the UIColor.
     /// For example, UIColor.blackColor() becomes "#000000".
     var hex: String {
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        self.getRed(&red, green: &green, blue: &blue, alpha: nil)
-
-        let r = Int(255.0 * red)
-        let g = Int(255.0 * green)
-        let b = Int(255.0 * blue)
-
-        let str = String(format: "#%02x%02x%02x", r, g, b)
-        return str
+        let cgColorInRGB = cgColor.converted(to: CGColorSpace(name: CGColorSpace.sRGB)!, intent: .defaultIntent, options: nil)!
+        let colorRef = cgColorInRGB.components
+        let r = colorRef?[0] ?? 0
+        let g = colorRef?[1] ?? 0
+        let b = ((colorRef?.count ?? 0) > 2 ? colorRef?[2] : g) ?? 0
+        let a = cgColor.alpha
+        
+        var color = String(
+            format: "#%02lX%02lX%02lX",
+            lroundf(Float(r * 255)),
+            lroundf(Float(g * 255)),
+            lroundf(Float(b * 255))
+        )
+        
+        if a < 1 {
+            color += String(format: "%02lX", lroundf(Float(a * 255)))
+        }
+        
+        return color
     }
     
     /// Hexadecimal set of the UIColor.
