@@ -56,6 +56,7 @@ body {
 /*    display: table-cell;*/
     display: block;
     height: 100%;
+    padding: 10px;
 }
 
 #editor:focus {

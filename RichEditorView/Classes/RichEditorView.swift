@@ -11,7 +11,7 @@ import UIKit
 import WebKit
     
 /// The value we hold in order to be able to set the line height before the JS completely loads.
-private let DefaultInnerLineHeight: Int = 21
+private let DefaultInnerLineHeight: Int = 28    //21
     
 /// RichEditorDelegate defines callbacks for the delegate of the RichEditorView
 @objc public protocol RichEditorDelegate: class {
