@@ -72,8 +72,6 @@
 		FBA6AB501AD3ED2D00721644 /* rich_editor.html in Resources */ = {isa = PBXBuildFile; fileRef = FBA6AB1A1AD3ED2D00721644 /* rich_editor.html */; };
 		FBA6AB511AD3ED2D00721644 /* rich_editor.js in Resources */ = {isa = PBXBuildFile; fileRef = FBA6AB1B1AD3ED2D00721644 /* rich_editor.js */; };
 		FBA6AB521AD3ED2D00721644 /* style.css in Resources */ = {isa = PBXBuildFile; fileRef = FBA6AB1C1AD3ED2D00721644 /* style.css */; };
-		FBA6AB881AD3ED3C00721644 /* CJWWebView+HackishAccessoryHiding.h in Headers */ = {isa = PBXBuildFile; fileRef = FBA6AB831AD3ED3C00721644 /* CJWWebView+HackishAccessoryHiding.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FBA6AB891AD3ED3C00721644 /* CJWWebView+HackishAccessoryHiding.m in Sources */ = {isa = PBXBuildFile; fileRef = FBA6AB841AD3ED3C00721644 /* CJWWebView+HackishAccessoryHiding.m */; };
 		FBA6AB8A1AD3ED3C00721644 /* RichEditorOptionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBA6AB851AD3ED3C00721644 /* RichEditorOptionItem.swift */; };
 		FBA6AB8B1AD3ED3C00721644 /* RichEditorToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBA6AB861AD3ED3C00721644 /* RichEditorToolbar.swift */; };
 		FBA6AB8C1AD3ED3C00721644 /* RichEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBA6AB871AD3ED3C00721644 /* RichEditorView.swift */; };
@@ -155,13 +153,10 @@
 		FBA6AB041AD3EC9F00721644 /* RichEditorViewTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RichEditorViewTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBA6AB0A1AD3EC9F00721644 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FBA6AB0B1AD3EC9F00721644 /* RichEditorViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichEditorViewTests.swift; sourceTree = "<group>"; };
-		FBA6AB181AD3ED2D00721644 /* checking.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = checking.js; sourceTree = "<group>"; };
 		FBA6AB191AD3ED2D00721644 /* normalize.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = normalize.css; sourceTree = "<group>"; };
 		FBA6AB1A1AD3ED2D00721644 /* rich_editor.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = rich_editor.html; sourceTree = "<group>"; };
 		FBA6AB1B1AD3ED2D00721644 /* rich_editor.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = rich_editor.js; sourceTree = "<group>"; };
 		FBA6AB1C1AD3ED2D00721644 /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = "<group>"; };
-		FBA6AB831AD3ED3C00721644 /* CJWWebView+HackishAccessoryHiding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CJWWebView+HackishAccessoryHiding.h"; path = "Classes/CJWWebView+HackishAccessoryHiding.h"; sourceTree = "<group>"; };
-		FBA6AB841AD3ED3C00721644 /* CJWWebView+HackishAccessoryHiding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CJWWebView+HackishAccessoryHiding.m"; path = "Classes/CJWWebView+HackishAccessoryHiding.m"; sourceTree = "<group>"; };
 		FBA6AB851AD3ED3C00721644 /* RichEditorOptionItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RichEditorOptionItem.swift; path = Classes/RichEditorOptionItem.swift; sourceTree = "<group>"; };
 		FBA6AB861AD3ED3C00721644 /* RichEditorToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RichEditorToolbar.swift; path = Classes/RichEditorToolbar.swift; sourceTree = "<group>"; };
 		FBA6AB871AD3ED3C00721644 /* RichEditorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RichEditorView.swift; path = Classes/RichEditorView.swift; sourceTree = "<group>"; };
@@ -248,8 +243,6 @@
 		FBA6AB151AD3ED1700721644 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				FBA6AB831AD3ED3C00721644 /* CJWWebView+HackishAccessoryHiding.h */,
-				FBA6AB841AD3ED3C00721644 /* CJWWebView+HackishAccessoryHiding.m */,
 				FBA6AB851AD3ED3C00721644 /* RichEditorOptionItem.swift */,
 				FBA6AB861AD3ED3C00721644 /* RichEditorToolbar.swift */,
 				FBA6AB871AD3ED3C00721644 /* RichEditorView.swift */,
@@ -273,7 +266,6 @@
 		FBA6AB171AD3ED2D00721644 /* editor */ = {
 			isa = PBXGroup;
 			children = (
-				FBA6AB181AD3ED2D00721644 /* checking.js */,
 				FBA6AB191AD3ED2D00721644 /* normalize.css */,
 				FBA6AB1A1AD3ED2D00721644 /* rich_editor.html */,
 				FBA6AB1B1AD3ED2D00721644 /* rich_editor.js */,
@@ -353,7 +345,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				FBA6AAFF1AD3EC9F00721644 /* RichEditorView.h in Headers */,
-				FBA6AB881AD3ED3C00721644 /* CJWWebView+HackishAccessoryHiding.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -517,7 +508,6 @@
 				42508577259014C1003F0171 /* RichEditorWebView.swift in Sources */,
 				FBA6AB8A1AD3ED3C00721644 /* RichEditorOptionItem.swift in Sources */,
 				FBA6AB8B1AD3ED3C00721644 /* RichEditorToolbar.swift in Sources */,
-				FBA6AB891AD3ED3C00721644 /* CJWWebView+HackishAccessoryHiding.m in Sources */,
 				FBA6AB8C1AD3ED3C00721644 /* RichEditorView.swift in Sources */,
 				42508576259014C1003F0171 /* UIColor+Extensions.swift in Sources */,
 				42508575259014C1003F0171 /* String+Extensions.swift in Sources */,
